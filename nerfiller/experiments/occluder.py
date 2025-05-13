@@ -1,4 +1,8 @@
-"""
+pip uninstall huggingface_hub
+# Confirm with y
+pip install huggingface_hub==0.20.3pip uninstall huggingface_hub
+# Confirm with y
+pip install huggingface_hub==0.20.3"""
 3D Occluder Experiments. These are baseline comparisons.
 """
 
@@ -38,7 +42,7 @@ class TrainOccluder(Train):
     """Train the baselines and our method."""
 
     dataset_names: List[str] = field(default_factory=lambda: occluder_dataset_names)
-    methods: List[str] = field(default_factory=lambda: methods)
+    methods: List[Tuple[str, str]] = field(default_factory=lambda: methods)
 
 
 @dataclass
@@ -46,7 +50,7 @@ class RenderOccluder(Render):
     """Render the baselines and our method."""
 
     dataset_names: List[str] = field(default_factory=lambda: occluder_dataset_names)
-    methods: List[str] = field(default_factory=lambda: methods)
+    methods: List[Tuple[str, str]] = field(default_factory=lambda: methods)
 
 
 @dataclass
@@ -54,4 +58,4 @@ class MetricsOccluder(Metrics):
     """Compute metrics on the baselines."""
 
     dataset_names: List[str] = field(default_factory=lambda: occluder_dataset_names)
-    methods: List[str] = field(default_factory=lambda: methods)
+    methods: List[Tuple[str, str]] = field(default_factory=lambda: methods)

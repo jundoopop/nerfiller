@@ -56,9 +56,9 @@ class ExperimentConfig(PrintableConfig):
 class EquiRGBDToNerfstudio(ExperimentConfig):
     """Convert 360 RGB-D image into Nerfstudio datasets"""
 
-    dataset_names: List[str] = ("village", "bed")
+    dataset_names: List[str] = field(default_factory=lambda: ["village", "bed"])
     """Which datasets to convert."""
-    dataset_types: List[str] = ("blender", "matterport")
+    dataset_types: List[str] = field(default_factory=lambda: ["blender", "matterport"])
     """Which dataset types the datasets are."""
 
     def main(self, dry_run: bool = False):
@@ -75,12 +75,9 @@ class EquiRGBDToNerfstudio(ExperimentConfig):
 class Inpaint(ExperimentConfig):
     """Inpaint Nerfstudio datasets"""
 
-    dataset_names: List[str] = field(default_factory=lambda: occluder_dataset_names)
+    dataset_names: List[str] = field(default_factory=lambda: list(occluder_dataset_names))
     """Which datasets to inpaint."""
-    inpaint_methods: List[str] = (
-        "individual-sd-image",
-        "individual-lama",
-    )
+    inpaint_methods: List[str] = field(default_factory=lambda: ["individual-sd-image", "individual-lama"])
     """Which inpainting methods to use."""
     chunk_size: Optional[int] = None
     new_size: Optional[int] = None
@@ -104,9 +101,9 @@ class Inpaint(ExperimentConfig):
 class Train(ExperimentConfig):
     """Train methods."""
 
-    dataset_names: List[str] = ("norway",)
+    dataset_names: List[str] = field(default_factory=lambda: ["norway"])
     """Which dataset to train on."""
-    methods: List[Tuple[str, str]] = (("grid-prior-du", "none"),)
+    methods: List[Tuple[str, str]] = field(default_factory=lambda: [("grid-prior-du", "none")])
     """Which methods to use and which dataset to start with (method, dataset inpaint method)."""
     gpus_per_job: int = 2
     """Number of gpus needed per job."""
@@ -118,7 +115,7 @@ class Train(ExperimentConfig):
                 dn = get_dataname(dataset_name, dataset_inpaint_method)
 
                 experiment_name = dataset_name + "-" + dataset_inpaint_method
-                command = f"ns-train {method} --data {dn} --experiment-name {experiment_name} --viewer.websocket-port=8082 --viewer.quit_on_train_completion True --vis viewer --viewer.default-composite-depth False --pipeline.model.camera_optimizer.mode off --pipeline.datamanager.masks-on-gpu True --pipeline.datamanager.images-on-gpu True"
+                command = f"ns-train {method} --data {dn} --experiment-name {experiment_name} --viewer.websocket-port=8082 --viewer.quit-on_train_completion True --vis viewer --viewer.default-composite-depth False --pipeline.model.camera_optimizer.mode off --pipeline.datamanager.masks-on-gpu True --pipeline.datamanager.images-on-gpu True"
                 if dataset_name in synthetic_dataset_names:
                     background_color = "black" if dataset_name in synthetic_black_background_dataset_names else "white"
                     command += f" --pipeline.model.background_color {background_color} --pipeline.model.disable_scene_contraction True --pipeline.model.distortion_loss_mult 0.0"
@@ -176,9 +173,9 @@ class Train(ExperimentConfig):
 class Render(ExperimentConfig):
     """Render the results."""
 
-    dataset_names: List[str] = ("norway",)
+    dataset_names: List[str] = field(default_factory=lambda: ["norway"])
     """Which dataset to train on."""
-    methods: List[Tuple[str, str]] = (("grid-prior-du", "none"),)
+    methods: List[Tuple[str, str]] = field(default_factory=lambda: [("grid-prior-du", "none")])
     """Which methods to use and which dataset to start with (method, dataset inpaint method)."""
     mode: str = "dataset+camera-path"
     """Which inpainting methods to use."""
@@ -216,9 +213,9 @@ class Render(ExperimentConfig):
 class Metrics(ExperimentConfig):
     """Compute metrics on the renders."""
 
-    dataset_names: List[str] = ("norway",)
+    dataset_names: List[str] = field(default_factory=lambda: ["norway"])
     """Which dataset to train on."""
-    methods: List[Tuple[str, str]] = (("grid-prior-du", "none"),)
+    methods: List[Tuple[str, str]] = field(default_factory=lambda: [("grid-prior-du", "none")])
     """Which methods to use and which dataset to start with (method, dataset inpaint method)."""
 
     def main(self, dry_run: bool = False):
@@ -254,12 +251,9 @@ class Metrics(ExperimentConfig):
 class Dreambooth(ExperimentConfig):
     """Fine-tune an inpainting model on a dataset."""
 
-    dataset_names: List[str] = ("aloe", "table", "couch")
+    dataset_names: List[str] = field(default_factory=lambda: ["aloe", "table", "couch"])
     """Which datasets to convert."""
-    mask_types: List[str] = (
-        "depth-aware",
-        "train-dist",
-    )
+    mask_types: List[str] = field(default_factory=lambda: ["depth-aware", "train-dist"])
 
     def main(self, dry_run: bool = False):
         jobs = []

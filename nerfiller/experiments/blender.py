@@ -38,7 +38,7 @@ methods = [
 class NeRFBlenderToNerfstudio(ExperimentConfig):
     """Convert NeRF synthetic blender datasets to Nerfstudio datasets"""
 
-    dataset_names: List[str] = field(default_factory=lambda: blender_dataset_names)
+    dataset_names: List[str] = field(default_factory=lambda: list(blender_dataset_names))
 
     def main(self, dry_run: bool = False):
         jobs = []
@@ -57,7 +57,7 @@ class NeRFBlenderToNerfstudio(ExperimentConfig):
 class InpaintBlender(Inpaint):
     """Inpaint Nerfstudio datasets"""
 
-    dataset_names: List[str] = field(default_factory=lambda: blender_dataset_names)
+    dataset_names: List[str] = field(default_factory=lambda: list(blender_dataset_names))
     inpaint_methods: List[str] = field(default_factory=lambda: inpaint_methods)
 
 
@@ -65,8 +65,8 @@ class InpaintBlender(Inpaint):
 class TrainBlender(Train):
     """Train Nerfacto on different inpainted datasets."""
 
-    dataset_names: List[str] = field(default_factory=lambda: blender_dataset_names)
-    methods: List[str] = field(default_factory=lambda: methods)
+    dataset_names: List[str] = field(default_factory=lambda: list(blender_dataset_names))
+    methods: List[Tuple[str, str]] = field(default_factory=lambda: methods)
     gpus_per_job: int = 1
 
 
@@ -74,13 +74,13 @@ class TrainBlender(Train):
 class RenderBlender(Render):
     """Render the blender scenes."""
 
-    dataset_names: List[str] = field(default_factory=lambda: blender_dataset_names)
-    methods: List[str] = field(default_factory=lambda: methods)
+    dataset_names: List[str] = field(default_factory=lambda: list(blender_dataset_names))
+    methods: List[Tuple[str, str]] = field(default_factory=lambda: methods)
 
 
 @dataclass
 class MetricsBlender(Metrics):
     """Compute metrics for the blender scenes."""
 
-    dataset_names: List[str] = field(default_factory=lambda: blender_dataset_names)
-    methods: List[str] = field(default_factory=lambda: methods)
+    dataset_names: List[str] = field(default_factory=lambda: list(blender_dataset_names))
+    methods: List[Tuple[str, str]] = field(default_factory=lambda: methods)

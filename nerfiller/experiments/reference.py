@@ -17,13 +17,13 @@ methods = [
 class TrainReference(Train):
     """Train our method with reference images."""
 
-    dataset_names: List[str] = field(default_factory=lambda: occluder_dataset_names)
-    methods: List[str] = field(default_factory=lambda: methods)
+    dataset_names: List[str] = field(default_factory=lambda: list(occluder_dataset_names))
+    methods: List[Tuple[str, str]] = field(default_factory=lambda: methods)
 
 
 @dataclass
 class RenderReference(Render):
     """Render our method that used reference images."""
 
-    dataset_names: List[str] = field(default_factory=lambda: occluder_dataset_names)
-    methods: List[str] = field(default_factory=lambda: methods)
+    dataset_names: List[str] = field(default_factory=lambda: list(occluder_dataset_names))
+    methods: List[Tuple[str, str]] = field(default_factory=lambda: methods)
